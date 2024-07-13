@@ -1,1 +1,18 @@
 extends layout
+
+block content
+  h1 #{category.name}
+
+  p 
+    strong Description: 
+    | #{category.description}
+
+  h2(style='font-size: 1.5rem;') Movies
+
+  each val in items
+    a(href=val.url) #{val.name}
+
+  p
+    a(href=category.url+'/delete') Delete Category
+  p
+    a(href=category.url+'/update') Update Category

@@ -1,24 +1,53 @@
 const Item = require("../models/item");
+const Category = require("../models/category");
 const asyncHandler = require("express-async-handler");
 
 exports.index = asyncHandler(async (req, res, next) => {
-    res.render("index");
+  const [
+    numItems,
+    numCategories,
+  ] = await Promise.all([
+    Item.countDocuments({}).exec(),
+    Category.countDocuments({}).exec(),
+  ]);
+
+    res.render("index", {
+      title: "My Inventory Home",
+      items_count: numItems,
+      categories_count: numCategories,
   });
+});
 
 exports.item_list = asyncHandler(async (req, res, next) => {
-    res.send("NOT IMPLEMENTED: item list");
+  const allItems = await Item.find({}, "name category")
+  .sort({ name: 1 })
+  .populate("category")
+  .exec();
+
+  res.render("item_list", { title: "Item List", item_list: allItems })
 });
 
 exports.item_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: item detail: ${req.params.id}`);
+  const item = await Item.findById(req.params.id).exec();
+
+  if (item === null) {
+    const err = new Error("Item not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("item_detail", {
+    name: item.name,
+    item: item
+  });
 });
 
 exports.item_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item create GET");
+  res.render("item_form")
 });
 
 exports.item_create_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item create POST");
+  res.render("item_form")
 });
 
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
