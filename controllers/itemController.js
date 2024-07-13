@@ -1,6 +1,7 @@
 const Item = require("../models/item");
 const Category = require("../models/category");
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 
 exports.index = asyncHandler(async (req, res, next) => {
   const [
@@ -28,7 +29,7 @@ exports.item_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_detail = asyncHandler(async (req, res, next) => {
-  const item = await Item.findById(req.params.id).exec();
+  const item = await Item.findById(req.params.id).populate("category").exec();
 
   if (item === null) {
     const err = new Error("Item not found");
@@ -38,12 +39,15 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
 
   res.render("item_detail", {
     name: item.name,
-    item: item
+    item: item,
+    category: category
   });
 });
 
 exports.item_create_get = asyncHandler(async (req, res, next) => {
-  res.render("item_form")
+  const allCategories = await Category.find().exec();
+
+  res.render("item_form", {title: "Create item", categories: allCategories})
 });
 
 exports.item_create_post = asyncHandler(async (req, res, next) => {

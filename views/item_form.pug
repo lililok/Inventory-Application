@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1=title
+
+   form(method='POST')
+     div.form-group
+        label(for='name') Name:
+        input#name.form-control(type='text', placeholder='Interstellar' name='name' required value=(undefined===item ? '' : item.name) )
+        label(for='description') Description:
+        input#description.form-control(type='text', placeholder='Earth is coming to an end and a few astronauts are traveling to find another home at the end of the galaxy.' name='description' required value=(undefined===item ? '' : item.description) )
+        label(for='category') Category:
+        select#category.form-control(name='category' required)
+          option(value='') --Please select a category--
+          for category in categories 
+            if item
+              if category._id.toString()===item.category._id.toString()
+                option(value=category._id selected) #{category.name}
+              else
+                option(value=category._id) #{category.name}
+            else
+              option(value=category._id) #{category.name}
+        label(for='price') Price:
+        input#price.form-control(type='number', placeholder='$' name='price' required value=(undefined===item ? '' : item.price) )
+        label(for='amount') Amount:
+        input#amount.form-control(type='number', placeholder='1-100' name='Amount' required value=(undefined===item ? '' : item.amount) )
+
+   button.btn.btn-primary(type='submit') Submit
+   

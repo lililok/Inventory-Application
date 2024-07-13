@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const Item = require("../models/item");
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 
 exports.category_list = asyncHandler(async (req, res, next) => {
   const allCategories = await Category.find().exec();
@@ -31,7 +32,7 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
 });
 
 exports.category_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: category create GET");
+  res.render("category_form", {title: "Create category"})
 });
 
 exports.category_create_post = asyncHandler(async (req, res, next) => {
