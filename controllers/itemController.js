@@ -29,7 +29,7 @@ exports.item_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_detail = asyncHandler(async (req, res, next) => {
-  const item = await Item.findById(req.params.id).populate("category").exec();
+  const item = await Item.findById(req.params.id).populate("category").exec()
 
   if (item === null) {
     const err = new Error("Item not found");
@@ -40,7 +40,6 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
   res.render("item_detail", {
     name: item.name,
     item: item,
-    category: category
   });
 });
 
