@@ -49,16 +49,32 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
   res.render("item_form", {title: "Create item", categories: allCategories})
 });
 
-exports.item_create_post = asyncHandler(async (req, res, next) => {
-  res.render("item_form")
-});
+exports.item_create_post = [
+
+]
 
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item delete GET");
+  const item = await Item.findById(req.params.id).exec()
+
+  if (item === null) {
+    res.redirect("/inventory/items");
+  }
+
+  res.render("item_delete", {
+    title: "Delete Item",
+    item: item,
+  });
 });
 
 exports.item_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item delete POST");
+  const item = await Item.findById(req.params.id).exec()
+
+  if (item === null) {
+    res.redirect("/inventory/items");
+  }
+
+  await Item.findByIdAndDelete(req.body.id);
+  res.redirect("/inventory/items");
 });
 
 exports.item_update_get = asyncHandler(async (req, res, next) => {
