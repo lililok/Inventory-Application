@@ -2,6 +2,9 @@ extends layout
 
 block content
   h1 #{item.name}
+
+  img(src=item.image, alt="movie poster")
+
   p 
     strong Category: 
     | #{item.category.name}

@@ -3,7 +3,7 @@ const Category = require("../models/category");
 const asyncHandler = require("express-async-handler");
 const multer = require('multer');
 const path = require('path');
-const uploadImage = require('../cloudinary');
+const cloudinary = require('../cloudinary');
 const { body, validationResult } = require("express-validator");
 
 const upload = multer({ dest: path.join(__dirname, '../uploads') });
@@ -55,35 +55,18 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_create_post = [
-  body("name", "Name must not be empty.")
-  .trim()
-  .isLength({ min: 1 })
-  .escape(),
-  body("description", "Decription must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("category.*").escape(),
-
   upload.single('image'),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
-    let imageUrl;
-    if (req.file) {
-      try {
-        imageUrl = await uploadImage(req.file.path);
-      } catch (error) {
-        return next(error);
-      }
-    }
-
+    const result = await cloudinary.uploader.upload(req.file.path);
+    let imageUrl = result.secure_url;
+    console.log(imageUrl)
     const item = new Item({
       name: req.body.name,
       description: req.body.description,
       category: req.body.category,
-      year: req.body.year,
       price: req.body.price,
       amount: req.body.amount,
       image: imageUrl,
@@ -91,7 +74,6 @@ exports.item_create_post = [
 
     if (!errors.isEmpty()) {
       const categories = await Category.find().exec();
-      
       res.render('item_form', {
         title: 'Create Item',
         item: item,

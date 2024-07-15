@@ -13,10 +13,6 @@ block content
       input#description.form-control(type='text', placeholder='Earth is coming to an end and a few astronauts are traveling to find another home at the end of the galaxy.' name='description' required value=(undefined === item ? '' : item.description))
 
     div.form-group
-      label(for='year') Year:
-      input#year.form-control(type='date' name='year' value=(undefined === item ? '' : item.year))
-
-    div.form-group
       label(for='category') Category:
       select#category.form-control(name='category' required)
         option(value='') select a category
