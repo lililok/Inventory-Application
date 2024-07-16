@@ -25,8 +25,7 @@ exports.index = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_list = asyncHandler(async (req, res, next) => {
-  const allItems = await Item.find({}, "name category")
-  .sort({ name: 1 })
+  const allItems = await Item.find()
   .populate("category")
   .exec();
 
@@ -90,6 +89,7 @@ exports.item_create_post = [
 
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id).exec()
+  const allCategories = await Category.find().exec();
 
   if (item === null) {
     res.redirect("/inventory/items");
@@ -98,6 +98,7 @@ exports.item_delete_get = asyncHandler(async (req, res, next) => {
   res.render("item_delete", {
     title: "Delete Item",
     item: item,
+    categories: allCategories
   });
 });
 
@@ -113,9 +114,18 @@ exports.item_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item update GET");
+  const item = await Item.findById(req.params.id).populate("category").exec()
+
+  if (item === null) {
+    res.redirect("/inventory/items");
+  }
+
+  res.render("item_form", {
+    title: "Update Item",
+    item: item,
+  });
 });
 
-exports.item_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: item update POST");
-});
+exports.item_update_post = [
+  
+]

@@ -3,22 +3,26 @@ extends layout
 block content
   h1 #{item.name}
 
-  img(src=item.image, alt="movie poster")
+  .item-container
 
-  p 
-    strong Category: 
-    | #{item.category.name}
-  p 
-    strong Description: 
-    | #{item.description}
-  p 
-    strong Price: 
-    | #{item.price}$
-  p 
-    strong Amount: 
-    | #{item.amount}
+    img(src=item.image, alt="movie poster")
 
-  p
-    a(href=item.url+'/delete') Delete Item
-  p
-    a(href=item.url+'/update') Update Item
+    .text
+
+      p 
+        strong Category: 
+        a(href=item.category.url) #{item.category.name}
+      p 
+        strong Description: 
+        | #{item.description}
+      p 
+        strong Price: 
+        | #{item.price}$
+      p 
+        strong Amount: 
+        | #{item.amount}
+  .delete-update
+    p
+      a(href=item.url+'/delete') Delete Item
+    p
+      a(href=item.url+'/update') Update Item

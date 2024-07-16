@@ -5,7 +5,7 @@ block content
   if category_list.length
     ul
       each category in category_list
-        li
+        li(class="category")
           a(href=category.url) #{category.name}
 
   else

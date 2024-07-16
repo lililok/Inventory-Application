@@ -9,10 +9,13 @@ block content
 
   h2(style='font-size: 1.5rem;') Movies
 
-  each val in items
-    a(href=val.url) #{val.name}
+  ul
+    each val in items
+      li
+        a(href=val.url) #{val.name}
 
-  p
-    a(href=category.url+'/delete') Delete Category
-  p
-    a(href=category.url+'/update') Update Category
+  .delete-update
+    p
+      a(href=category.url+'/delete') Delete Category
+    p
+      a(href=category.url+'/update') Update Category

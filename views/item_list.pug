@@ -3,11 +3,11 @@ extends layout
 block content
   h1= title
   if item_list.length
-    ul
+    .grid
       each item in item_list
-        li
-          a(href=item.url) #{item.name}
-          |  (#{item.category.name})
-
+        .card
+          a(href=item.url)
+            img(src=item.image, alt="movie poster")
+            p #{item.name}
   else
     p No items!
