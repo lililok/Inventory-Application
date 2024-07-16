@@ -35,6 +35,8 @@ block content
 
     div.form-group
       label(for='image') Image:
-      input#image.form-control(type='file', name='image' required)
+      if item.image
+        img(src=`${item.image}` alt='current image' width='150')
+      input#image.form-control(type='file', name='image')
 
     button.btn.btn-primary(type='submit') Submit

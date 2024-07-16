@@ -115,6 +115,7 @@ exports.item_delete_post = asyncHandler(async (req, res, next) => {
 
 exports.item_update_get = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id).populate("category").exec()
+  const allCategories = await Category.find().exec();
 
   if (item === null) {
     res.redirect("/inventory/items");
@@ -123,9 +124,47 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
   res.render("item_form", {
     title: "Update Item",
     item: item,
+    categories: allCategories
   });
 });
 
 exports.item_update_post = [
-  
+  upload.single('image'),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    let imageUrl;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url;
+    }
+
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      category: req.body.category,
+      price: req.body.price,
+      amount: req.body.amount,
+      _id: req.params.id,
+    })
+
+    if (imageUrl) {
+      item.image = imageUrl; 
+    }
+
+    if (!errors.isEmpty()) {
+      const categories = await Category.find().exec();
+      res.render('item_form', {
+        title: 'Create Item',
+        item: item,
+        categories: categories,
+        errors: errors.array()
+      });
+      return;
+    } else {
+      await Item.findByIdAndUpdate(req.params.id, item);
+      res.redirect(item.url);
+    }
+  }),
 ]
