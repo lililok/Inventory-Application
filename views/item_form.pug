@@ -35,7 +35,7 @@ block content
 
     div.form-group
       label(for='image') Image:
-      if item.image
+      if item && item.image
         img(src=`${item.image}` alt='current image' width='150')
       input#image.form-control(type='file', name='image')
 
